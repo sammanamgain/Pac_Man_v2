@@ -1,10 +1,10 @@
-import { PowerUp } from "./../class/PowerUp";
+
 import { map } from "../constant";
 import { Boundary } from "../class/Boundary";
 import { createImage } from "../utils/util";
 import { Pellet } from "../class/Pellet";
 import { PowerUp } from "../class/PowerUp";
-export function drawWall(boundaries, pellets, powerUps) {
+export function drawWall(boundaries:Boundary[], pellets:Pellet[], powerUps:PowerUp[]) {
   map.forEach((row, i) => {
     row.forEach((symbol, j) => {
       switch (symbol) {
@@ -147,7 +147,7 @@ export function drawWall(boundaries, pellets, powerUps) {
                 x: j * Boundary.width,
                 y: i * Boundary.height,
               },
-              color: "blue",
+
               image: createImage("./img/pipeConnectorTop.png"),
             })
           );
@@ -159,7 +159,7 @@ export function drawWall(boundaries, pellets, powerUps) {
                 x: j * Boundary.width,
                 y: i * Boundary.height,
               },
-              color: "blue",
+
               image: createImage("./img/pipeConnectorRight.png"),
             })
           );
@@ -171,7 +171,7 @@ export function drawWall(boundaries, pellets, powerUps) {
                 x: j * Boundary.width,
                 y: i * Boundary.height,
               },
-              color: "blue",
+
               image: createImage("./img/pipeConnectorBottom.png"),
             })
           );

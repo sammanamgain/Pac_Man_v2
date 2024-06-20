@@ -1,5 +1,5 @@
-export const canvas = document.getElementById("canvas") as HTMLCanvasElement;
-export const ctx: CanvasRenderingContext2D = canvas.getContext("2d");
+export const canvas:HTMLCanvasElement = document.getElementById("canvas") as HTMLCanvasElement;
+export const ctx: CanvasRenderingContext2D = canvas.getContext("2d") as CanvasRenderingContext2D;
 export const keys = {
   w: {
     pressed: false,
@@ -16,7 +16,7 @@ export const keys = {
   lastkey: "",
 };
 
-export const map = [
+export const map:(string|number)[][] = [
   ["1", "-", "-", "-", "-", "-", "-", "-", "-", "-", "2"],
   ["|", ".", ".", ".", ".", ".", ".", ".", ".", ".", "|"],
   ["|", ".", "b", ".", "[", "7", "]", ".", "b", ".", "|"],

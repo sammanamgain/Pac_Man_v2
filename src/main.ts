@@ -1,28 +1,28 @@
 import "./style.css";
 
 // import
-import { canvas, ctx, map, keys } from "./constant";
+import { canvas, ctx,  keys } from "./constant";
 import { PowerUp } from "./class/PowerUp";
 import { Boundary } from "./class/Boundary";
 import { Ghost } from "./class/Ghost";
 import { Pellet } from "./class/Pellet";
 import { Player } from "./class/Player";
 import {
-  createImage,
+
   checkColissionWithBoundary,
   checkColissionBetweenCircleAndCircle,
 } from "./utils/util";
 import { drawWall } from "./utils/drawWall";
 import { eventListener } from "./utils/eventListener";
-const score = document.getElementById("score");
+const score:HTMLElement = document.getElementById("score") as HTMLElement;
 let gameOver: boolean = false;
 canvas.width = innerWidth;
 canvas.height = innerHeight;
-let tmpScore = 0;
+let tmpScore:number = 0;
 
-const powerUps = [];
-const pellets = [];
-const boundaries = [];
+const powerUps:PowerUp[] = [];
+const pellets:Pellet[] = [];
+const boundaries:Boundary[] = [];
 
 const ghosts = [
   new Ghost({
@@ -52,7 +52,7 @@ const player = new Player({
   },
 });
 
-let animationId: number;
+
 function animate() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 
@@ -77,11 +77,11 @@ function animate() {
     const pellet = pellets[i];
     pellet.draw();
 
-    //Check Colission between player and pellet(circle and circel)
+
     if (checkColissionBetweenCircleAndCircle(player, pellet)) {
-      pellets.splice(i, 1); //The splice() method adds and/or removes array elements. The splice() method overwrites the original array.Syntax array.splice(index, howmanyToRemove, item1, ....., itemX)
+      pellets.splice(i, 1);
       tmpScore += 10;
-      score.innerHTML = tmpScore;
+      score.innerHTML = `${tmpScore}`;
     }
   }
 
@@ -90,11 +90,11 @@ function animate() {
   }
 
   for (let i = powerUps.length - 1; i >= 0; i--) {
-    const powerup = powerUps[i];
+    const powerup:PowerUp = powerUps[i];
     powerup.draw();
 
     //Check Colission between player and pellet(circle and circel)
-    if (checkColissionBetweenCircleAndCircle(powerup, player)) {
+    if (checkColissionBetweenCircleAndCircle( player,powerup)) {
       powerUps.splice(i, 1); //The splice() method adds and/or removes array elements. The splice() method overwrites the original array.Syntax array.splice(index, howmanyToRemove, item1, ....., itemX)
       ghosts.forEach((ghost) => {
         ghost.scared = true;
@@ -113,7 +113,7 @@ function animate() {
   for (let i = ghosts.length - 1; i >= 0; i--) {
     let ghost = ghosts[i];
 
-    if (checkColissionBetweenCircleAndCircle(ghost, player)) {
+    if (checkColissionBetweenCircleAndCircle( player,ghost)) {
       if (ghost.scared) {
         ghosts.splice(i, 1);
       } else {
@@ -123,7 +123,7 @@ function animate() {
       }
     }
 
-    const collisions = [];
+    const collisions:string[] = [];
     boundaries.forEach((boundary) => {
       if (
         !collisions.includes("right") &&
@@ -231,7 +231,7 @@ function animate() {
   //ghost ending
 
   if (!gameOver) {
-    animationId = requestAnimationFrame(animate);
+    requestAnimationFrame(animate);
   }
 
   // rotating for chop chop animation

@@ -1,12 +1,33 @@
 import { Boundary } from "./../class/Boundary";
+import {PowerUp} from "../class/PowerUp.ts";
+import {Player} from "../class/Player.ts";
+import {Pellet} from "../class/Pellet.ts";
 
-export function createImage(src) {
+
+interface Position {
+  x: number,
+  y: number,
+}
+
+interface GhostConstructor {
+  position: Position,
+  velocity: Position,
+  color?: string,
+  radius:number,
+}
+
+export function createImage(src:string) {
   const image = new Image();
   image.src = src;
   return image;
 }
 
-export function checkColissionWithBoundary({ circle, rectangle }) {
+interface checkColissionWithBoundaryParameter{
+  circle:Player|GhostConstructor,
+  rectangle:Boundary
+}
+
+export function checkColissionWithBoundary({ circle, rectangle }:checkColissionWithBoundaryParameter) {
   // Empty space between circle boundary and square boundary
   const padding = Boundary.width / 2 - circle.radius - 1;
   return (
@@ -20,7 +41,7 @@ export function checkColissionWithBoundary({ circle, rectangle }) {
       rectangle.position.x + rectangle.width + padding
   );
 }
-export function checkColissionBetweenCircleAndCircle(powerup,player):boolean {
+export function checkColissionBetweenCircleAndCircle(player:Player,powerup:PowerUp|Pellet):boolean {
 return(
   Math.hypot(
     powerup.position.x - player.position.x,

@@ -1,5 +1,5 @@
 import { keys } from "../constant";
-export function eventListener(lastkey) {
+export function eventListener() {
   addEventListener("keydown", ({ key }) => {
     switch (key) {
       case "w":
