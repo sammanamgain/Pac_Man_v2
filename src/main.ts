@@ -110,8 +110,6 @@ function drawMap() {
 		reinitializeGameEntities()
 	}
 		drawWall(map, boundaries, pellets, powerUps);
-
-
 	console.log("after boundary update",boundaries.length)
 }
 
@@ -127,8 +125,6 @@ function animate() {
 
 	else if(game.state=='custom')
 	{
-
-
 		ctx.clearRect(
 			0,0,canvas.width,canvas.height
 		)
@@ -145,12 +141,7 @@ function animate() {
 	{
 	//	debugger;
 		ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-
-
         console.log("normal",map)
-
-
 		let coordinateX: number = player.position.x;
 		let coordinateY: number = player.position.y;
 		let coordinateGhostX: number = ghosts[2].position.x;
@@ -255,7 +246,7 @@ function animate() {
 						circle: {
 							...ghost,
 							velocity: {
-								x: 5,
+								x: ghost.speed,
 								y: 0,
 							},
 						},
@@ -270,7 +261,7 @@ function animate() {
 						circle: {
 							...ghost,
 							velocity: {
-								x: -5,
+								x: -ghost.speed,
 								y: 0,
 							},
 						},
@@ -286,7 +277,7 @@ function animate() {
 							...ghost,
 							velocity: {
 								x: 0,
-								y: -5,
+								y: -ghost.speed,
 							},
 						},
 						rectangle: boundary,
@@ -301,7 +292,7 @@ function animate() {
 							...ghost,
 							velocity: {
 								x: 0,
-								y: 5,
+								y: ghost.speed,
 							},
 						},
 						rectangle: boundary,
