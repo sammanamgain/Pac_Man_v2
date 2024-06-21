@@ -30,6 +30,7 @@ interface checkColissionWithBoundaryParameter{
 export function checkColissionWithBoundary({ circle, rectangle }:checkColissionWithBoundaryParameter) {
   // Empty space between circle boundary and square boundary
   const padding = Boundary.width / 2 - circle.radius - 1;
+  //const padding=0
   return (
     circle.position.y - circle.radius + circle.velocity.y <=
       rectangle.position.y + rectangle.height + padding &&
@@ -48,4 +49,19 @@ return(
     powerup.position.y - player.position.y
   ) <
   powerup.radius + player.radius)
+}
+export function checkColissionWithBoundaryWithOutPadding({ circle, rectangle }:checkColissionWithBoundaryParameter) {
+  // Empty space between circle boundary and square boundary
+ // const padding = Boundary.width / 2 - circle.radius - 1;
+  const padding=0
+  return (
+      circle.position.y - circle.radius + circle.velocity.y <=
+      rectangle.position.y + rectangle.height + padding &&
+      circle.position.x + circle.radius + circle.velocity.x >=
+      rectangle.position.x - padding &&
+      circle.position.y + circle.radius + circle.velocity.y >=
+      rectangle.position.y - padding &&
+      circle.position.x - circle.radius + circle.velocity.x <=
+      rectangle.position.x + rectangle.width + padding
+  );
 }

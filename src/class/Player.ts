@@ -14,6 +14,7 @@ interface PlayerConstructor {
 }
 
 export class Player {
+	static speed:number=100;
 	public position: Position;
 	public velocity: Position;
 	public radius: number;
@@ -25,7 +26,7 @@ export class Player {
 	constructor({position, velocity}: PlayerConstructor) {
 		this.position = position;
 		this.velocity = velocity;
-		this.radius = 10;
+		this.radius = 15;
 		this.radian = 0.75;
 		this.openRate = 0.12;
 		this.rotation = 0;

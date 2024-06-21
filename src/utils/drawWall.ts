@@ -1,12 +1,19 @@
 
-import { map } from "../constant";
+//import { map } from "../constant";
 import { Boundary } from "../class/Boundary";
-import { createImage } from "../utils/util";
+import { createImage } from "./util.ts";
 import { Pellet } from "../class/Pellet";
 import { PowerUp } from "../class/PowerUp";
-export function drawWall(boundaries:Boundary[], pellets:Pellet[], powerUps:PowerUp[]) {
+
+
+export function drawWall(map:(string|number)[][],boundaries:Boundary[], pellets:Pellet[], powerUps:PowerUp[]) {
+    boundaries.length=0;
+    pellets.length=0;
+    powerUps.length=0
   map.forEach((row, i) => {
     row.forEach((symbol, j) => {
+
+
       switch (symbol) {
         case "-":
           boundaries.push(
@@ -199,15 +206,31 @@ export function drawWall(boundaries:Boundary[], pellets:Pellet[], powerUps:Power
           break;
 
         case "p":
-          powerUps.push(
-            new PowerUp({
+
+            powerUps.push(new PowerUp({
               position: {
                 x: j * Boundary.width + Boundary.width / 2,
                 y: i * Boundary.height + Boundary.height / 2,
               },
             })
-          );
+          )
           break;
+          case '0':
+              break;
+
+
+          // case "player":
+          //
+          //    player= new Player({
+          //         position: { x: 100, y: 140 },
+          //         velocity: {
+          //             x: 0,
+          //             y: 0,
+          //         },
+          //     });
+          //     break;
+
+
       }
     });
   });

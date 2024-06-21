@@ -10,6 +10,7 @@ interface GhostConstructor {
 	position: Position,
 	velocity: Position,
 	color?: string
+	label?:string
 }
 
 export class Ghost {
@@ -21,9 +22,10 @@ export class Ghost {
 	public speed: number;
 	public scared: boolean;
 	public radius: number;
+	public label:string|null|undefined;
 
 
-	constructor({position, velocity, color = "red"}: GhostConstructor) {
+	constructor({position, velocity, color = "red",label}: GhostConstructor) {
 		this.position = position;
 		this.velocity = velocity;
 		this.radius = 15;
@@ -31,6 +33,7 @@ export class Ghost {
 		this.prevCollisions = [];
 		this.speed = 1;
 		this.scared = false;
+		this.label=label
 	}
 
 

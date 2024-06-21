@@ -6,16 +6,18 @@ interface Position {
 }
 
 interface PelletConstructor {
-	position: Position
+	position: Position,
+	label?:string,
 }
 
 export class Pellet {
 	public position: Position;
 	public radius: number;
-
-	constructor({position}: PelletConstructor) {
+    public label:string|undefined;
+	constructor({position,label}: PelletConstructor) {
 		this.position = position;
-		this.radius = 3;
+		this.radius = 5;
+		this.label=label
 	}
 
 	// Used to draw a circle

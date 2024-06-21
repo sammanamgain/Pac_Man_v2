@@ -7,7 +7,8 @@ interface Position {
 
 interface BoundaryConstructor {
 	position: Position,
-	image: HTMLImageElement
+	image: HTMLImageElement,
+	label?:string
 }
 
 export class Boundary {
@@ -17,14 +18,15 @@ export class Boundary {
 	public image: HTMLImageElement;
 	public width: number;
 	public height: number;
+	public label:string|null|undefined;
 
-	constructor({position, image}: BoundaryConstructor) {
+	constructor({position, image,label}: BoundaryConstructor) {
 		this.position = position;
 		this.width = 40;
 		this.height = 40;
 		this.image = image;
+		this.label=label
 	}
-
 	draw() {
 		ctx.fillStyle = "blue";
 		ctx.drawImage(this.image, this.position.x, this.position.y);
