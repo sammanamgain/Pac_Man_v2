@@ -1,188 +1,214 @@
-import {canvas, ctx, customgrid } from '../constant.ts';
-import {Boundary} from "../class/Boundary.ts";
+import { PowerUp } from "./../class/PowerUp";
+import { Boundary } from "./../class/Boundary";
+import { customgrid, canvas, ctx } from "../constant.ts";
+import { Pellet } from "../class/Pellet.ts";
+import { Player } from "../class/Player.ts";
+import { Item } from "../class/Item";
+import { createImage } from "../utils/util.ts";
 
-import {Pellet} from "../class/Pellet.ts";
-import {Player} from "../class/Player.ts";
-import {createImage} from "../utils/util.ts";
+export function customMapBuilder(
+  elements: (Boundary | Player | Pellet)[],
+  toolbar: (Boundary | Pellet)[]
+) {
+  canvas.height = customgrid.length * Boundary.height + 80;
 
+  const gridSize = Boundary.width;
+  let selectedElements = "";
+  const walls = [];
 
-export function customMapBuilder(elements: (Boundary | Player | Pellet)[], toolbar: (Boundary | Pellet)[]) {
-	const gridSize = Boundary.width;
-	let selectedElements: string = '';
-	const walls = [];
-	//console.log("starting grid",customgrid)
-    toolbar.length=0
-	// drawing initial grid
-	for (let i = 0; i < customgrid.length ; i++) {
+  toolbar.length = 0;
 
-		for (let j = 0; j < customgrid[i].length; j++) {
-			let block = customgrid[i][j];
-			let imgSrc = '';
-			switch (block) {
-				case '-':
-					imgSrc = './img/pipeHorizontal.png';
-					break;
-				case '|':
-					imgSrc = './img/pipeVertical.png';
-					break;
-				case '1':
-					imgSrc = './img/pipeCorner1.png';
-					break;
-				case '2':
-					imgSrc = './img/pipeCorner2.png';
-					break;
-				case '3':
-					imgSrc = './img/pipeCorner3.png';
-					break;
-				case '4':
-					imgSrc = './img/pipeCorner4.png';
-					break;
-				case 'b':
-					imgSrc = './img/block.png';
-					break;
-				case '[':
-					imgSrc = './img/capLeft.png';
-					break;
-				case ']':
-					imgSrc = './img/capRight.png';
-					break;
-				case '_':
-					imgSrc = './img/capBottom.png';
-					break;
-				case '^':
-					imgSrc = './img/capTop.png';
-					break;
-				case '+':
-					imgSrc = './img/pipeCross.png';
-					break;
-				case '5':
-					imgSrc = './img/pipeConnectorTop.png';
-					break;
-				case '6':
-					imgSrc = './img/pipeConnectorRight.png';
-					break;
-				case '7':
-					imgSrc = './img/pipeConnectorBottom.png';
-					break;
-				case '8':
-					imgSrc = './img/pipeConnectorLeft.png';
-					break;
-			}
-			if (imgSrc != '') {
-				walls.push(new Boundary({
-					position: {x:Boundary.width * j, y:Boundary.height * i},
-					image: createImage(imgSrc)
-				}));
-			}
-		}
+  // Prepare walls based on the custom grid
+  for (let i = 0; i < customgrid.length; i++) {
+    for (let j = 0; j < customgrid[i].length; j++) {
+      const block = customgrid[i][j];
+      const imgSrc = getImageSrc(block);
+      if (imgSrc) {
+        walls.push(
+          new Boundary({
+            position: { x: Boundary.width * j, y: Boundary.height * i },
+            image: createImage(imgSrc),
+          })
+        );
+      }
+    }
+  }
 
-	}
+  function getImageSrc(block) {
+    switch (block) {
+      case "-":
+        return "./img/pipeHorizontal.png";
+      case "|":
+        return "./img/pipeVertical.png";
+      case "1":
+        return "./img/pipeCorner1.png";
+      case "2":
+        return "./img/pipeCorner2.png";
+      case "3":
+        return "./img/pipeCorner3.png";
+      case "4":
+        return "./img/pipeCorner4.png";
+      case "b":
+        return "./img/block.png";
+      case "[":
+        return "./img/capLeft.png";
+      case "]":
+        return "./img/capRight.png";
+      case "_":
+        return "./img/capBottom.png";
+      case "^":
+        return "./img/capTop.png";
+      case "+":
+        return "./img/pipeCross.png";
+      case "5":
+        return "./img/pipeConnectorTop.png";
+      case "6":
+        return "./img/pipeConnectorRight.png";
+      case "7":
+        return "./img/pipeConnectorBottom.png";
+      case "8":
+        return "./img/pipeConnectorLeft.png";
 
+      case "I":
+        return "./img/sprites/cherry.png";
+      default:
+        return "";
+    }
+  }
 
+  // Prepare toolbar items
+  const toolbarItems = [
+    { label: "Wall", type: Boundary, imgSrc: "./img/block.png" },
+    { label: "Pellets", type: Pellet },
+    { label: "Item", type: Item, imgSrc: "./img/sprites/blueGhost.png" },
+    { label: "PowerUp", type: PowerUp },
+  ];
 
+  for (let i = 0; i < toolbarItems.length; i++) {
+    const { label, type, imgSrc } = toolbarItems[i];
+    if (label == "PowerUp") {
+      toolbar.push(
+        new PowerUp({
+          position: {
+            x: 40 * i + Boundary.height / 2,
+            y: (customgrid.length + 1) * 40 + Boundary.height / 2,
+          },
+        })
+      );
+    }
 
-	function drawGrid() {
-		for (let i = 0; i < customgrid.length ; i++) {
-			for (let j = 0; j < customgrid[0].length; j++) {
-				const x = j * gridSize;
-				const y = i * gridSize;
-				if (customgrid[i][j] === '.') {
-					ctx.strokeRect(x, y, gridSize, gridSize);
-				}
-			}
-		}
-	}
+    if (label == "Item") {
+      let item = new Item({
+        position: {
+          x: 40 * i + Boundary.height / 2,
+          y: (customgrid.length + 1) * 40 + Boundary.height / 2,
+        },
+        label: "Item",
+      });
+      toolbar.push(item);
+    } else if (label == "Wall") {
+      toolbar.push(
+        new Boundary({
+          position: { x: 40 * i, y: (customgrid.length + 1) * 40 },
+          image: createImage("./img/block.png"),
+          label: label,
+        })
+      );
+    }
+  }
 
-	walls.forEach((wall) => {
-		wall.draw();
-	});
+  function drawGrid() {
+    for (let i = 0; i < customgrid.length - 1; i++) {
+      for (let j = 0; j < customgrid[0].length; j++) {
+        const x = j * gridSize;
+        const y = i * gridSize;
+        if (customgrid[i][j] === ".") {
+          ctx.strokeRect(x, y, gridSize, gridSize);
+        }
+      }
+    }
+  }
 
+  function drawElements() {
+    walls.forEach((wall) => wall.draw());
+    toolbar.forEach((tool) => tool.draw());
+  }
 
-	const toolbarItems = [
-		{label: 'Wall'},
-		{label: 'Pellets'},
+  // Initial draw
+  drawGrid();
+  drawElements();
 
-	];
+  canvas.addEventListener("click", (e) => {
+    const rect = canvas.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
 
-	for (let i = 0; i < toolbarItems.length; i++) {
-	//	console.log("loop called")
+    if (y < (customgrid.length - 2) * 40) {
+      handleGridClick(x, y);
+    } else {
+      handleToolbarClick(x);
+    }
+  });
 
-		const toolbarItem = toolbarItems[i];
+  function handleGridClick(x, y) {
+    const blockX = Math.floor(x / gridSize) * gridSize;
+    const blockY = Math.floor(y / gridSize) * gridSize;
 
-		if (toolbarItem.label == 'Wall') {
+    if (selectedElements) {
+      if (customgrid[blockY / 40][blockX / 40] !== "") {
+        console.log("already there");
+        return;
+      }
+      addElement(blockX, blockY, selectedElements);
+    }
+  }
 
-			toolbar.push(new Boundary({
-				position: {x:40 * i, y:(customgrid.length+1) * 40 },
-				image: createImage('./img/block.png'),
-				label: toolbarItem.label
+  function handleToolbarClick(x) {
+    const toolIndex = Math.floor(x / 40);
+    const clickedTool = toolbar[toolIndex];
 
-			}));
-		}
-		else if (toolbarItem.label == 'Pellets') {
-			toolbar.push(new Pellet(
-				{
-					position: {x:40 * i+Boundary.width/2 , y:(customgrid.length+1) * 40 +Boundary.height/2  },
-					label:toolbarItem.label
+    if (clickedTool) {
+      selectedElements = clickedTool.label;
+      console.log(selectedElements);
+    }
+  }
 
-				})
-			)
-		}
-	}
-
-
-	//console.log("final",toolbar)
-
-	function drawToolbar() {
-		toolbar.forEach((tool) => {
-			tool.draw();
-		});
-	}
-
-	// Initial draw
-	drawGrid();
-	drawToolbar();
-
-	canvas.addEventListener('click', (e) => {
-		const rect = canvas.getBoundingClientRect();
-		const x = e.clientX - rect.left;
-		const y = e.clientY - rect.top;
-
-		// Check if the click is outside the toolbar area
-		if (y < (customgrid.length*40) ) {
-			const blockX = Math.floor(x / gridSize) * gridSize;
-			const blockY = Math.floor(y / gridSize) * gridSize;
-
-			if (selectedElements) {
-				if (selectedElements === 'Wall') {
-					customgrid[blockY / 40][blockX / 40] = 'b';
-					let wall = new Boundary({
-						position: {x:blockX,y: blockY},
-
-						image: createImage('./img/block.png'),
-						label: "Wall"
-					});
-					elements.push(wall);
-				}
-
-				else if (selectedElements === 'Pellets') {
-					customgrid[blockY / 40][blockX / 40] = '.';
-					let wall = new Pellet(
-						{
-							position: {x: blockX + 25, y: blockY + 25},
-						})
-
-					elements.push(wall);
-				}
-			}
-		}
-		else {
-			// Handle toolbar click
-			const toolIndex = Math.floor(x / 40);
-			const clickedTool = toolbar[toolIndex];
-
-			if (clickedTool) {
-				selectedElements = clickedTool.label as string;
-			}
-		}
-	});
+  function addElement(x, y, type) {
+    let element;
+    switch (type) {
+      case "Wall":
+        customgrid[y / 40][x / 40] = "b";
+        element = new Boundary({
+          position: { x, y },
+          image: createImage("./img/block.png"),
+          label: "Wall",
+        });
+        break;
+      case "Pellets":
+        customgrid[y / 40][x / 40] = ".";
+        element = new Pellet({
+          position: { x: x + 25, y: y + 25 },
+          label: "Pellets",
+        });
+        break;
+      case "Item":
+        customgrid[y / 40][x / 40] = "I";
+        element = new Item({
+          position: { x: x + 25, y: y + 25 },
+          imgSrc: "./img/sprites/cherry.png",
+          label: "Item",
+        });
+        break;
+      case "PowerUp":
+        customgrid[y / 40][x / 40] = "p";
+        element = new PowerUp({
+          position: { x: x + 25, y: y + 25 },
+          label: "PowerUp",
+        });
+        break;
+    }
+    if (element) {
+      elements.push(element);
+    }
+  }
 }

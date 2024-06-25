@@ -1,5 +1,113 @@
-*{
-  margin:0;
-  padding:0;
+* {
+  margin: 0;
+  padding: 0;
   box-sizing: border-box;
+}
+body {
+  background-color: black !important;
+  height: 100vh;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  font-family: "Press Start 2P";
+}
+
+.canvas {
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.start_game {
+  margin-top: 40rem;
+  font-family: "Press Start 2P";
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.title {
+  font-family: "Press Start 2P";
+  margin-top: -10rem;
+}
+
+h1 {
+  font-family: "Press Start 2P";
+  color: white;
+  font-size: 44px;
+}
+.button {
+  /* background-color: yellow; */
+
+  font-size: 32px;
+  margin-top: 10rem;
+}
+.button button {
+  font-family: "Press Start 2P";
+  padding: 2rem 10rem;
+  border: none;
+  background-color: black;
+  border: 1px solid yellow;
+  border-radius: 25%;
+  color: white;
+  font-size: 24px;
+}
+
+#score {
+  opacity: 0;
+}
+#canvas {
+  opacity: 0;
+}
+#load {
+  margin-top: 5rem;
+  padding: 2rem 10rem;
+  border: 1px solid yellow;
+  background-color: black;
+  color: white;
+  border-radius: 25%;
+  opacity: 0;
+  margin-left: -1rem;
+}
+
+#endscreen {
+  top: 35%;
+  position: absolute;
+  display: none;
+  color: white;
+  border: 3px solid yellow;
+  padding: 2rem 6rem;
+  z-index: 100;
+}
+
+#endscreen h1 {
+  font-family: "Press Start 2P";
+  font-size: 64px;
+  font-weight: 600;
+}
+#endscreen button {
+  color: white;
+  background: none;
+  font-family: "Press Start 2P";
+  padding: 1rem 3rem;
+
+  font-size: 24px;
+  margin: 1rem auto;
+  border-radius: 25%;
+  border: 1px solid yellow;
+  margin: 1rem 5rem;
+}
+
+#pause {
+  color: white;
+  position: absolute;
+  right: 10%;
+  top: 5%;
+}
+.pause {
+  color: white;
 }

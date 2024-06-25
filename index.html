@@ -4,16 +4,53 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
+    />
     <title>Vite + TS</title>
   </head>
   <body>
-    <div>
-      <span>
-        Score:
-      </span>
+    <div id="pause">
+      <span class="material-symbols-outlined pause"> pause_circle </span>
+    </div>
+    <div class="start_game">
+      <div class="title">
+        <h1>Pac-Man Game</h1>
+      </div>
+      <div class="button">
+        <button id="start">start</button>
+      </div>
+      <div class="button">
+        <button id="custom">custom</button>
+      </div>
+    </div>
+
+    <div id="score">
+      <span> Score: </span>
       <span id="score">0</span>
     </div>
-    <canvas id="canvas"></canvas>
+    <div>
+      <canvas id="canvas"></canvas>
+    </div>
+    <div>
+      <button id="load">Load</button>
+    </div>
+    <div class="endscreen" id="endscreen">
+      <h1>Gameover</h1>
+      <button id="restart">Restart game</button>
+    </div>
+
     <script type="module" src="/src/main.ts"></script>
   </body>
 </html>
