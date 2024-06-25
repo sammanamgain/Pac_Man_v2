@@ -29,6 +29,8 @@ export const maps:string[][][] = [
     ["|", ".", ".", "b", ".", "[", "7", "]", ".", "b", ".", ".", "|"],
     ["|", ".", ".", ".", ".", ".", "|", ".", ".", ".", ".", ".", "|"],
     ["|", ".", ".", "[", "]", ".", "_", ".", "[", "]", ".", ".", "|"],
+    ["|", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", "|"],
+
     ["_", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", "_"],
     [".", ".", ".", "b", ".", "[", "5", "]", ".", "b", ".", ".", "."],
     ["^", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", "^"],
@@ -401,19 +403,19 @@ export const ghostPositions = [
   [
     {
       x: Boundary.width * 6 + Boundary.width / 2,
-      y: Boundary.height * 6 + 0.5 * Boundary.height,
+      y: Boundary.height * 7 + 0.5 * Boundary.height,
     },
     {
       x: Boundary.width * 6 + Boundary.width / 2,
-      y: Boundary.height * 7 + Boundary.height / 2,
+      y: Boundary.height *8 + Boundary.height / 2,
     },
     {
       x: Boundary.width * 5 + Boundary.width / 2,
-      y: Boundary.height * 7 + Boundary.height / 2,
+      y: Boundary.height * 8 + Boundary.height / 2,
     },
     {
       x: Boundary.width * 7 + Boundary.width / 2,
-      y: Boundary.height * 7 + Boundary.height / 2,
+      y: Boundary.height * 8 + Boundary.height / 2,
     },
   ],
   [

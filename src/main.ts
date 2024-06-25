@@ -7,7 +7,6 @@ import {
   ghostPositions,
   getGame,
   customgrid,
-
   cherryAudio,
   powerupAudio,
   successAudio,
@@ -21,7 +20,6 @@ import { Item } from "./class/Item";
 
 import {
   checkColissionBetweenCircleAndCircle,
-
 } from "./utils/util";
 import { drawWall } from "./utils/drawWall";
 import { eventListener } from "./utils/eventListener";
@@ -45,7 +43,6 @@ const pellets: Pellet[] = [];
 const boundaries: Boundary[] = [];
 const elements: (Boundary | Pellet)[] = [];
 const toolbar: (Boundary | Pellet)[] = [];
-//let levelCompleteFlag = false;
 let ghosts: Ghost[] = [];
 let items: Item[] = [];
 let highScore: boolean = false;
@@ -56,14 +53,6 @@ let colCount = map[0].length;
 canvas.width = Boundary.width * colCount + 40;
 canvas.height = Boundary.height * rowCount + 40;
 let player: Player;
-
-
-function drawWallAsync(map:[][], boundaries:Boundary[], pellets:Pellet[], powerUps:PowerUp[], items:Item[]) {
-  return new Promise<void>((resolve) => {
-    drawWall(map, boundaries, pellets, powerUps, items);
-    resolve();
-  });
-}
 
 let passedTime = 0;
 
@@ -121,7 +110,6 @@ let Game = {
 
       game.customGridEnabled = false;
     } else {
-      console.log("what is reason behind this");
       ghosts = [
         new Ghost({
           position: { ...ghostPositions[level][0] },
@@ -153,7 +141,6 @@ let Game = {
           startAfter: 10 - level * 2,
         }),
       ];
-      //  ghosts[0].position.x = ghosts[0].position.x - 5;
     }
 
     startTime = Date.now();
@@ -180,11 +167,11 @@ function resetGame() {
   gameInitialized = false;
   score.innerHTML = `${tmpScore}`;
   Game.reset();
-  initializeGameElements().then(() => {
-    game.state = "play";
-    gameInitialized = true;
-  });
+  initializeGameElements();
+  game.state = "play";
+  gameInitialized = true;
 }
+
 function clearLevel() {
   boundaries.length = 0;
   pellets.length = 0;
@@ -207,28 +194,25 @@ function clearLevel() {
 
 function initializeGameElements() {
   if (game.customGridEnabled) {
-    lives = 1;
+    lives = 2;
     map = customgrid;
     canvas.width = map[0].length * Boundary.width + 80;
     canvas.height = map.length * Boundary.height + 80;
   }
-  return drawWallAsync(map, boundaries, pellets, powerUps, items).then(() => {
-    Game.init();
-  });
+  drawWall(map, boundaries, pellets, powerUps, items);
+  Game.init();
 }
 
 function animate() {
-  const Highest_score=document.getElementById("Highest_score")  as HTMLElement
- Highest_score .innerHTML  =
-    localStorage.getItem("pacscore") as string;
+  const Highest_score = document.getElementById("Highest_score") as HTMLElement;
+  Highest_score.innerHTML = localStorage.getItem("pacscore") as string;
 
   if (localStorage.getItem("pacscore") == null) {
     localStorage.setItem("pacscore", `${tmpScore}`);
   }
   if (Number(localStorage.getItem("pacscore")) < tmpScore) {
-    console.log("high score set to true");
     highScore = true;
-    localStorage.setItem("pacscore", `${tmpScore}` );
+    localStorage.setItem("pacscore", `${tmpScore}`);
   }
 
   if (game.state === "pause") {
@@ -244,34 +228,25 @@ function animate() {
     toolbar.forEach((ele) => ele.draw());
   } else if (game.state == "play") {
     if (!gameInitialized) {
-      initializeGameElements().then(() => {
-        gameInitialized = true;
-        startAnimation();
-      });
-    } else {
-      startAnimation();
+      initializeGameElements();
+      gameInitialized = true;
     }
+    startAnimation();
   } else if (game.state == "levelComplete") {
     ctx.fillStyle = "white";
     ctx.font = "40px Arial";
     ctx.fillText("Level Complete!", canvas.width / 2 - 100, canvas.height / 2);
   } else if (game.state == "gameOver") {
-
     const endscreen = document.getElementById("endscreen") as HTMLElement;
     endscreen.style.display = "block";
-    const game_over_highest_score=document.getElementById("game_over_highest_score") as HTMLElement
-    game_over_highest_score.style.display = "block";
+    const game_over_highest_score = document.getElementById("game_over_highest_score") as HTMLElement;
+    game_over_highest_score.style.opacity = "0";
     game_over_highest_score.style.marginTop = "1rem";
 
-    //   console.log(highScore);
     if (highScore) {
-
-        let score: number = Math.floor( parseInt(localStorage.getItem("pacscore") as string)  ) ;
-        const game_over_highest_score=  document.getElementById(
-            "game_over_highest_score") as HTMLElement;
-
-
-    game_over_highest_score.innerHTML = `you got the highest score : ${score}`;
+      let score: number = Math.floor(parseInt(localStorage.getItem("pacscore") as string));
+      game_over_highest_score.style.opacity = "100";
+      game_over_highest_score.innerHTML = `you got the highest score : ${score}`;
       highScore = false;
     }
 
@@ -286,6 +261,7 @@ function animate() {
   requestAnimationFrame(animate);
 }
 
+
 function startAnimation() {
   levelUpdate = false;
   mapClone = JSON.parse(JSON.stringify(map));
@@ -299,24 +275,20 @@ function startAnimation() {
   coordinateY = player.position.y;
 
   mapClone[Math.floor(coordinateY / Boundary.width)][
-    Math.floor(coordinateX / Boundary.height)
-  ] = "player";
+      Math.floor(coordinateX / Boundary.height)
+      ] = "player";
 
   if (ghosts[0]) {
     coordinateGhostX = ghosts[0].position.x;
     coordinateGhostY = ghosts[0].position.y;
 
     mapClone[Math.floor(coordinateGhostY / Boundary.width)][
-      Math.floor(coordinateGhostX / Boundary.height)
-    ] = "ghost";
+        Math.floor(coordinateGhostX / Boundary.height)
+        ] = "ghost";
   }
 
-  //console.log(map);
   let currentTime = Date.now();
   let dt: number = (currentTime - startTime) / 1000;
-  // console.log("current time", currentTime);
-
-  //console.log(dt);
   startTime = currentTime;
 
   passedTime += dt;
@@ -335,7 +307,7 @@ function startAnimation() {
     boundary.draw();
   });
 
-  if (pellets.length <= 40 && game.state == "play") {
+  if (pellets.length <= 0 && game.state == "play") {
     game.state = "levelComplete";
     levelUpdate = true;
     level = level + 1;
@@ -367,8 +339,8 @@ function startAnimation() {
         let coordinateY = pellet.position.y;
 
         map[Math.floor(coordinateY / Boundary.width)][
-          Math.floor(coordinateX / Boundary.height)
-        ] = "";
+            Math.floor(coordinateX / Boundary.height)
+            ] = "";
         let audiosrc = ["./audio/pellet.mp3", "./audio/pellet2.mp3"];
 
         let audio = new Audio(audiosrc[Math.floor(Math.random() * 2)]);
@@ -416,13 +388,13 @@ function startAnimation() {
 
   player.update(dt, boundaries);
   mapClone[Math.floor(coordinateY / Boundary.width)][
-    Math.floor(coordinateX / Boundary.height)
-  ] = "";
+      Math.floor(coordinateX / Boundary.height)
+      ] = "";
   coordinateX = player.position.x;
   coordinateY = player.position.y;
   mapClone[Math.floor(coordinateY / Boundary.width)][
-    Math.floor(coordinateX / Boundary.height)
-  ] = "player";
+      Math.floor(coordinateX / Boundary.height)
+      ] = "player";
   ghosts.forEach((ghost, index) => {
     if (checkColissionBetweenCircleAndCircle(player, ghost)) {
       if (ghosts && ghost.scared) {
@@ -451,19 +423,19 @@ function startAnimation() {
       }
     }
     if (game.state == "pause") return;
-    console.log(mapClone);
+
 
     ghost.update(dt, boundaries, level, mapClone);
 
     if (ghost.label === "aggressive") {
       mapClone[Math.floor(coordinateGhostY / Boundary.width)][
-        Math.floor(coordinateGhostX / Boundary.height)
-      ] = "";
+          Math.floor(coordinateGhostX / Boundary.height)
+          ] = "";
       coordinateGhostX = ghost.position.x;
       coordinateGhostY = ghost.position.y;
       mapClone[Math.floor(coordinateGhostY / Boundary.width)][
-        Math.floor(coordinateGhostX / Boundary.height)
-      ] = "ghost";
+          Math.floor(coordinateGhostX / Boundary.height)
+          ] = "ghost";
     }
 
     if (ghost.state === "cage" && passedTime >= ghost.startAfter) {
@@ -471,8 +443,8 @@ function startAnimation() {
     }
 
     if (
-      ghost.state === "entering" &&
-      Date.now() - startTime >= ghost.startAfter * 1000 + 2000
+        ghost.state === "entering" &&
+        Date.now() - startTime >= ghost.startAfter * 1000 + 2000
     ) {
       ghost.state = "active";
     }
@@ -485,11 +457,11 @@ function startAnimation() {
   player.draw();
 }
 
+
 eventListener();
 animate();
-const pause=document.getElementById("pause") as HTMLElement
+const pause = document.getElementById("pause") as HTMLElement;
 pause.addEventListener("click", () => {
-  console.log(game.state);
   if (game.state == "play") {
     game.state = "pause";
   } else if (game.state == "pause") {
@@ -500,7 +472,7 @@ pause.addEventListener("click", () => {
     requestAnimationFrame(animate);
   }
 });
-const restart=document.getElementById("restart") as HTMLElement
+const restart = document.getElementById("restart") as HTMLElement;
 restart.addEventListener("click", () => {
   lives = 2;
   gameOver = true;

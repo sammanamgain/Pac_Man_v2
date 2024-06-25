@@ -13,6 +13,7 @@ body {
   align-items: center;
   overflow: hidden;
   font-family: "Press Start 2P";
+  position: relative;
 }
 
 .canvas {
@@ -67,6 +68,7 @@ h1 {
   opacity: 0;
 }
 #canvas {
+
   opacity: 0;
 }
 #load {

@@ -160,7 +160,7 @@ export function customMapBuilder(
 
     if (selectedElements) {
       if (customgrid[blockY / 40][blockX / 40] !== "") {
-        //  console.log("already there");
+
         return;
       }
       addElement(blockX, blockY, selectedElements);
@@ -173,7 +173,6 @@ export function customMapBuilder(
 
     if (clickedTool) {
       selectedElements= clickedTool.label as string;
-      console.log(selectedElements);
     }
   }
 

@@ -1,6 +1,6 @@
 import { ghostPositions, ghostAudio } from "./../constant";
 import { ctx ,canvas} from "../constant";
-import { getBestMove } from "../Algorithms/aStar.ts";
+import { getBestMove } from "../Algorithms/pathFinder.ts";
 const SPEED = 140;
 const CELL_SIZE = 20;
 import { checkColissionWithBoundary } from "../utils/util";
@@ -135,10 +135,8 @@ export class Ghost {
 
     if (this.label === "aggressive") {
       this.aggressiveUpdate(map, boundaries, dt, level);
-      console.log("map at aggressive", map);
     } else {
       const validMoves = this.gatherValidMoves(boundaries);
-      console.log("valid moves", validMoves);
       if (
         validMoves.length > 0 &&
         validMoves.length !== this.previousValidMoves.length
@@ -165,7 +163,7 @@ export class Ghost {
 
   aggressiveUpdate(map:(string)[][], boundaries:Boundary[], dt:number, level:number) {
     const bestMove = getBestMove(map);
-    console.log("best move", bestMove);
+
 
     for (const move of bestMove) {
       switch (move) {
@@ -188,7 +186,6 @@ export class Ghost {
       }
 
       if (!this.collision(boundaries)) {
-        console.log("collision doesnot occur with ",this.velocity.x, this.velocity.y);
         this.position.x += this.velocity.x * dt * (SPEED + 50 * level);
         this.position.y += this.velocity.y * dt * (SPEED + 50 * level);
 
@@ -272,7 +269,7 @@ export class Ghost {
   }
 
   enterGame(level:number) {
-    console.log(level);
+
 
     const targetX = ghostPositions[level][1].x;
     const targetY = ghostPositions[level][1].y - Boundary.height;

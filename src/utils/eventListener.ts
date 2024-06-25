@@ -1,5 +1,5 @@
 
-import { customgrid, game, keys } from "../constant";
+import {  game, keys } from "../constant";
 
 export function eventListener() {
   addEventListener("keydown", ({ key }) => {
@@ -42,16 +42,13 @@ export function eventListener() {
 
 addEventListener("keydown", ({ key }) => {
   if (key === "p") {
-    console.log("played called");
+
 
     game.state = "play";
   } else if (key === "c") {
     game.state = "custom";
   }
   if (key === "l" && game.state === "custom") {
-    console.log("added eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee");
-    //   debugger
-    console.log(customgrid);
     game.state = "play";
     game.customGridEnabled = true;
 
@@ -72,11 +69,12 @@ start.addEventListener("click", () => {
   scoreDiv.style.opacity = "100";
   scoreDiv.style.display = "block";
   scoreDiv.style.position = "absolute";
-  scoreDiv.style.top = "3rem";
+  scoreDiv.style.top = "1rem";
   scoretext.style.opacity = "100";
-  scoretext.style.marginTop = "-100px";
+ //scoretext.style.marginTop = "-100px";
   const canvas = document.getElementById("canvas") as HTMLCanvasElement;
   canvas.style.opacity = "100";
+
   const pause = document.getElementById("pause") as HTMLElement;
   pause.style.display = "block";
 

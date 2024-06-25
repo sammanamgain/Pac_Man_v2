@@ -1,4 +1,4 @@
-let lastMove:any = null; // This should be stored between frames in a persistent way
+
 
 export function getBestMove(grid: (string | number)[][]) {
   const directions = [
@@ -11,7 +11,6 @@ export function getBestMove(grid: (string | number)[][]) {
   let ghostPos = null;
   let playerPos = null;
 
-  // Find player and ghost positions
   for (let y = 0; y < grid.length; y++) {
     for (let x = 0; x < grid[y].length; x++) {
       if (grid[y][x] === "player") {
@@ -24,14 +23,13 @@ export function getBestMove(grid: (string | number)[][]) {
   }
 
   if (!ghostPos || !playerPos) {
-    return ["stay"]; // If either the player or ghost position is not found
+    return ["stay"];
   }
 
   function manhattanDistance(a: any, b: any) {
     return Math.abs(a.x - b.x) + Math.abs(a.y - b.y);
   }
 
-  // Calculate distances for each possible move
   let moves = directions.map((direction) => {
     const newPos = { x: ghostPos.x + direction.x, y: ghostPos.y + direction.y };
     return {
@@ -41,17 +39,13 @@ export function getBestMove(grid: (string | number)[][]) {
     };
   });
 
-  // Filter out the opposite of the last move
-  if (lastMove) {
-    moves = moves.filter((move) => move.name !== lastMove.opposite);
-  }
 
-  // Sort moves by ascending distance
+
+
   moves.sort((a, b) => a.distance - b.distance);
 
-  // Store the best move as lastMove for the next frame
-  lastMove = moves[0].name;
 
-  // Return sorted move names
+
+
   return moves.map((move) => move.name);
 }
