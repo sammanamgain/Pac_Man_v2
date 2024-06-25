@@ -2,6 +2,7 @@ import { Boundary } from "./../class/Boundary";
 import { PowerUp } from "../class/PowerUp.ts";
 import { Player } from "../class/Player.ts";
 import { Pellet } from "../class/Pellet.ts";
+import {Ghost} from "../class/Ghost.ts";
 
 interface Position {
   x: number;
@@ -44,7 +45,7 @@ export function checkColissionWithBoundary({
 }
 export function checkColissionBetweenCircleAndCircle(
   player: Player,
-  powerup: PowerUp | Pellet | Ghost
+  powerup: (PowerUp | Pellet | Ghost)
 ): boolean {
   return (
     Math.hypot(

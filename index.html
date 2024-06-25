@@ -21,9 +21,9 @@
     <title>Vite + TS</title>
   </head>
   <body>
-    <div id="pause">
+    <button id="pause">
       <span class="material-symbols-outlined pause"> pause_circle </span>
-    </div>
+    </button>
     <div class="start_game">
       <div class="title">
         <h1>Pac-Man Game</h1>
@@ -36,9 +36,14 @@
       </div>
     </div>
 
-    <div id="score">
-      <span> Score: </span>
-      <span id="score">0</span>
+    <div id="scorediv">
+      <span id="higest_score_text"> Highest Score: </span>
+      <span id="Highest_score"> </span>
+      <div style="margin-top: 1rem">
+        <span id="scoretext"> Score: </span>
+
+        <span id="score">0</span>
+      </div>
     </div>
     <div>
       <canvas id="canvas"></canvas>
@@ -48,6 +53,7 @@
     </div>
     <div class="endscreen" id="endscreen">
       <h1>Gameover</h1>
+      <h4 id="game_over_highest_score">Highest score:</h4>
       <button id="restart">Restart game</button>
     </div>
 

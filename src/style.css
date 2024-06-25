@@ -56,8 +56,14 @@ h1 {
   color: white;
   font-size: 24px;
 }
+#scoretext {
+  background-color: black;
+  color: white;
+  opacity: 0;
+}
 
 #score {
+  color: white;
   opacity: 0;
 }
 #canvas {
@@ -103,11 +109,29 @@ h1 {
 }
 
 #pause {
-  color: white;
+  border: none;
+  background-color: black;
   position: absolute;
   right: 10%;
   top: 5%;
+  display: none;
 }
 .pause {
+  font-size: 5rem;
   color: white;
+}
+#higest_score_text {
+  color: white;
+}
+
+#Highest_score {
+  color: white;
+}
+
+#scorediv {
+  display: none;
+}
+
+#game_over_highest_score {
+  display: none;
 }

@@ -1,7 +1,7 @@
 import { ctx, canvas } from "../constant";
 import { checkColissionWithBoundary } from "../utils/util";
 import { Boundary } from "./Boundary.ts";
-const SPEED = 250;
+const SPEED = 200;
 const CELL_SIZE = 20;
 interface Position {
   x: number;
@@ -56,7 +56,7 @@ export class Player {
     ctx.restore();
   }
 
-  collision(boundaries) {
+  collision(boundaries:Boundary[]) {
     for (const boundary of boundaries) {
       if (
         checkColissionWithBoundary({
@@ -77,7 +77,7 @@ export class Player {
     };
   }
 
-  isValidMove(boundaries) {
+  isValidMove(boundaries:Boundary[]) {
     for (const boundary of boundaries) {
       // 5 is the constant so to get 5 px space
       if (
@@ -98,7 +98,7 @@ export class Player {
     return true;
   }
 
-  movePlayer(dt, boundaries) {
+  movePlayer(dt:number, boundaries:Boundary[]) {
     if (this.isValidMove(boundaries)) {
       this.velocity.x = this.desiredDirection.x;
       this.velocity.y = this.desiredDirection.y;
@@ -115,7 +115,7 @@ export class Player {
     if (this.radian < 0 || this.radian > 0.75) {
       this.openRate = -this.openRate;
     }
-    this.radian += this.openRate;
+    this.radian += this.openRate * 0.5;
 
     this.checkOutOfXaxis();
     this.checkOutOfYaxis();
@@ -140,7 +140,7 @@ export class Player {
   }
   // when we add dt, we check collision at 5 px per frame, but in reality we are moving at different range due to dt variation
 
-  update(dt: number, boundaries) {
+  update(dt: number, boundaries:Boundary[]) {
     this.draw();
     if (this.state === "active") {
       this.movePlayer(dt, boundaries);
@@ -149,7 +149,7 @@ export class Player {
     }
   }
 
-  move(direction) {
+  move(direction:string) {
     switch (direction) {
       case "up":
         this.desiredDirection = {

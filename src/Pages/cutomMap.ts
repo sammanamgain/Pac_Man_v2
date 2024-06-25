@@ -1,6 +1,7 @@
+import { customgrid } from "./../constant";
 import { PowerUp } from "./../class/PowerUp";
 import { Boundary } from "./../class/Boundary";
-import { customgrid, canvas, ctx } from "../constant.ts";
+import {  canvas, ctx } from "../constant.ts";
 import { Pellet } from "../class/Pellet.ts";
 import { Player } from "../class/Player.ts";
 import { Item } from "../class/Item";
@@ -11,10 +12,11 @@ export function customMapBuilder(
   toolbar: (Boundary | Pellet)[]
 ) {
   canvas.height = customgrid.length * Boundary.height + 80;
+  canvas.width = customgrid[0].length * Boundary.width + 80;
 
   const gridSize = Boundary.width;
-  let selectedElements = "";
-  const walls = [];
+  let selectedElements:string = "";
+  const walls:Boundary[] = [];
 
   toolbar.length = 0;
 
@@ -34,7 +36,7 @@ export function customMapBuilder(
     }
   }
 
-  function getImageSrc(block) {
+  function getImageSrc(block:string) {
     switch (block) {
       case "-":
         return "./img/pipeHorizontal.png";
@@ -85,27 +87,28 @@ export function customMapBuilder(
   ];
 
   for (let i = 0; i < toolbarItems.length; i++) {
-    const { label, type, imgSrc } = toolbarItems[i];
+   const { label } = toolbarItems[i];
     if (label == "PowerUp") {
       toolbar.push(
         new PowerUp({
           position: {
-            x: 40 * i + Boundary.height / 2,
+            x: 40 * i,
             y: (customgrid.length + 1) * 40 + Boundary.height / 2,
           },
+          label: "PowerUp",
         })
       );
-    }
-
-    if (label == "Item") {
-      let item = new Item({
-        position: {
-          x: 40 * i + Boundary.height / 2,
-          y: (customgrid.length + 1) * 40 + Boundary.height / 2,
-        },
-        label: "Item",
-      });
-      toolbar.push(item);
+    } else if (label == "Item") {
+      toolbar.push(
+        new Boundary({
+          position: {
+            x: 40 * i - 30,
+            y: (customgrid.length + 1) * 40,
+          },
+          image: createImage("./img/sprites/cherry.png"),
+          label: "Item",
+        })
+      );
     } else if (label == "Wall") {
       toolbar.push(
         new Boundary({
@@ -122,12 +125,13 @@ export function customMapBuilder(
       for (let j = 0; j < customgrid[0].length; j++) {
         const x = j * gridSize;
         const y = i * gridSize;
-        if (customgrid[i][j] === ".") {
+        if (customgrid[i][j] == "" || customgrid[i][j] == " ") {
           ctx.strokeRect(x, y, gridSize, gridSize);
         }
       }
     }
   }
+  // drawGrid()
 
   function drawElements() {
     walls.forEach((wall) => wall.draw());
@@ -150,30 +154,30 @@ export function customMapBuilder(
     }
   });
 
-  function handleGridClick(x, y) {
+  function handleGridClick(x:number, y:number) {
     const blockX = Math.floor(x / gridSize) * gridSize;
     const blockY = Math.floor(y / gridSize) * gridSize;
 
     if (selectedElements) {
       if (customgrid[blockY / 40][blockX / 40] !== "") {
-        console.log("already there");
+        //  console.log("already there");
         return;
       }
       addElement(blockX, blockY, selectedElements);
     }
   }
 
-  function handleToolbarClick(x) {
+  function handleToolbarClick(x:number) {
     const toolIndex = Math.floor(x / 40);
     const clickedTool = toolbar[toolIndex];
 
     if (clickedTool) {
-      selectedElements = clickedTool.label;
+      selectedElements= clickedTool.label as string;
       console.log(selectedElements);
     }
   }
 
-  function addElement(x, y, type) {
+  function addElement(x:number, y:number, type:string) {
     let element;
     switch (type) {
       case "Wall":
@@ -195,7 +199,7 @@ export function customMapBuilder(
         customgrid[y / 40][x / 40] = "I";
         element = new Item({
           position: { x: x + 25, y: y + 25 },
-          imgSrc: "./img/sprites/cherry.png",
+
           label: "Item",
         });
         break;

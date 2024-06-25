@@ -2,7 +2,7 @@ import { Boundary } from "../class/Boundary";
 import { createImage } from "./util.ts";
 import { Pellet } from "../class/Pellet";
 import { PowerUp } from "../class/PowerUp";
-import { Ghost } from "../class/Ghost";
+
 import { Item } from "../class/Item";
 
 export function drawWall(

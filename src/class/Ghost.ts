@@ -1,8 +1,7 @@
 import { ghostPositions, ghostAudio } from "./../constant";
-import { ctx, ghostPositions } from "../constant";
+import { ctx ,canvas} from "../constant";
 import { getBestMove } from "../Algorithms/aStar.ts";
-import { shortestPathDirection } from "../Algorithms/dfs";
-const SPEED = 75;
+const SPEED = 140;
 const CELL_SIZE = 20;
 import { checkColissionWithBoundary } from "../utils/util";
 import { Boundary } from "./Boundary.ts";
@@ -32,7 +31,7 @@ export class Ghost {
   public scared: boolean;
   public radius: number;
   public label: string | null | undefined;
-  public previousValidMoves: [];
+  public previousValidMoves:{x:number, y:number}  [];
   public image: HTMLImageElement;
   public state: string;
   public startAfter: number;
@@ -40,6 +39,8 @@ export class Ghost {
   public imageLoaded: boolean;
   public timePassed: number;
   public currentFrame: number;
+  public defaultSrc:string;
+  public scaredsrc:string;
 
   constructor({
     position,
@@ -58,11 +59,11 @@ export class Ghost {
     this.speed = 2;
     this.scared = false;
     this.label = label;
-    this.previousValidMoves = [];
+    this.previousValidMoves= [];
     this.image = new Image();
     this.defaultSrc = imgSrc;
     this.image.src = imgSrc;
-    this.image.scaredsrc = "./img/sprites/scaredGhost.png";
+    this.scaredsrc = "./img/sprites/scaredGhost.png";
     this.imageLoaded = false;
     this.timePassed = 0;
     this.currentFrame = 0;
@@ -110,7 +111,7 @@ export class Ghost {
       this.position.y = this.radius;
     }
   }
-  update(dt, boundaries, level, map) {
+  update(dt:number, boundaries:Boundary[], level:number, map:(string)[][]) {
     this.draw();
     this.updateSprite(dt);
 
@@ -134,8 +135,10 @@ export class Ghost {
 
     if (this.label === "aggressive") {
       this.aggressiveUpdate(map, boundaries, dt, level);
+      console.log("map at aggressive", map);
     } else {
       const validMoves = this.gatherValidMoves(boundaries);
+      console.log("valid moves", validMoves);
       if (
         validMoves.length > 0 &&
         validMoves.length !== this.previousValidMoves.length
@@ -160,10 +163,10 @@ export class Ghost {
     this.checkOutOfXaxis();
   }
 
-  aggressiveUpdate(map, boundaries, dt, level) {
-    console.log(map);
+  aggressiveUpdate(map:(string)[][], boundaries:Boundary[], dt:number, level:number) {
     const bestMove = getBestMove(map);
-    console.log(bestMove);
+    console.log("best move", bestMove);
+
     for (const move of bestMove) {
       switch (move) {
         case "up":
@@ -185,15 +188,16 @@ export class Ghost {
       }
 
       if (!this.collision(boundaries)) {
-        this.position.x += this.velocity.x;
-        this.position.y += this.velocity.y;
+        console.log("collision doesnot occur with ",this.velocity.x, this.velocity.y);
+        this.position.x += this.velocity.x * dt * (SPEED + 50 * level);
+        this.position.y += this.velocity.y * dt * (SPEED + 50 * level);
 
         break;
       }
     }
   }
 
-  updateSprite(dt) {
+  updateSprite(dt:number) {
     this.timePassed += dt;
     if (this.timePassed > 0.3) {
       this.currentFrame = (this.currentFrame + 1) % 8;
@@ -201,7 +205,7 @@ export class Ghost {
     }
   }
 
-  collision(boundaries) {
+  collision(boundaries:Boundary[]) {
     for (const boundary of boundaries) {
       if (
         checkColissionWithBoundary({
@@ -222,7 +226,7 @@ export class Ghost {
     };
   }
 
-  gatherValidMoves(boundaries) {
+  gatherValidMoves(boundaries:Boundary[]) {
     const directions = [
       { x: 1, y: 0 },
       { x: -1, y: 0 },
@@ -267,7 +271,7 @@ export class Ghost {
     return validMoves;
   }
 
-  enterGame(level) {
+  enterGame(level:number) {
     console.log(level);
 
     const targetX = ghostPositions[level][1].x;

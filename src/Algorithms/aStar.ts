@@ -1,4 +1,4 @@
-let lastMove = null; // This should be stored between frames in a persistent way
+let lastMove:any = null; // This should be stored between frames in a persistent way
 
 export function getBestMove(grid: (string | number)[][]) {
   const directions = [

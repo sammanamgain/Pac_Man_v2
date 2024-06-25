@@ -15,8 +15,13 @@ export class Item {
   public position: Position;
   public radius: number;
   public label: string | undefined;
+  public image:HTMLImageElement;
+  private center:Position;
+  private radian:number;
+  private loaded:boolean;
 
   constructor({ position, label }: ItemConstructor) {
+    this.loaded=false;
     this.position = position;
     this.radius = 10;
     this.image = new Image();
