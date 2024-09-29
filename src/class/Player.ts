@@ -3,7 +3,7 @@
 import { ctx, canvas } from "../constant";
 import { checkColissionWithBoundary } from "../utils/util";
 import { Boundary } from "./Boundary.ts";
-import { keys } from "../constant";
+
 const SPEED = 300;
 const CELL_SIZE = 20;
 interface Position {
@@ -50,7 +50,7 @@ export class Player {
       this.radius,
       this.radian,
 
-      2 * Math.PI - this.radian,
+      2 * Math.PI - this.radian
     );
     ctx.lineTo(this.position.x, this.position.y);
     ctx.fillStyle = "yellow";
@@ -144,8 +144,6 @@ export class Player {
     this.radian += this.openRate * 0.5;
 
     this.draw();
-    const isanykeyPressed: boolean =
-      keys.w.pressed || keys.a.pressed || keys.s.pressed || keys.d.pressed;
     if (this.state === "active") {
       this.movePlayer(dt, boundaries);
     } else if (this.state === "intermediate") {

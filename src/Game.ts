@@ -91,6 +91,7 @@ export class Games {
     this.pellets = [];
     this.powerUps = [];
     this.items = [];
+    this.startTime = Date.now();
     this.addEvent();
     this.drawmap();
   }

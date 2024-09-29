@@ -1,4 +1,3 @@
-import { Player } from "../class/Player";
 import { keys } from "../constant";
 import { Games } from "../Game";
 export function eventListener(game: Games) {
