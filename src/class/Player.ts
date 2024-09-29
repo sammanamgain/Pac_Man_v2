@@ -1,7 +1,10 @@
+// something issuse between speed or delta time
+
 import { ctx, canvas } from "../constant";
 import { checkColissionWithBoundary } from "../utils/util";
 import { Boundary } from "./Boundary.ts";
-const SPEED = 200;
+import { keys } from "../constant";
+const SPEED = 300;
 const CELL_SIZE = 20;
 interface Position {
   x: number;
@@ -47,7 +50,7 @@ export class Player {
       this.radius,
       this.radian,
 
-      2 * Math.PI - this.radian
+      2 * Math.PI - this.radian,
     );
     ctx.lineTo(this.position.x, this.position.y);
     ctx.fillStyle = "yellow";
@@ -56,7 +59,7 @@ export class Player {
     ctx.restore();
   }
 
-  collision(boundaries:Boundary[]) {
+  collision(boundaries: Boundary[]) {
     for (const boundary of boundaries) {
       if (
         checkColissionWithBoundary({
@@ -65,7 +68,6 @@ export class Player {
         })
       ) {
         return true;
-        break;
       }
     }
     return false;
@@ -77,7 +79,7 @@ export class Player {
     };
   }
 
-  isValidMove(boundaries:Boundary[]) {
+  isValidMove(boundaries: Boundary[]) {
     for (const boundary of boundaries) {
       // 5 is the constant so to get 5 px space
       if (
@@ -98,7 +100,7 @@ export class Player {
     return true;
   }
 
-  movePlayer(dt:number, boundaries:Boundary[]) {
+  movePlayer(dt: number, boundaries: Boundary[]) {
     if (this.isValidMove(boundaries)) {
       this.velocity.x = this.desiredDirection.x;
       this.velocity.y = this.desiredDirection.y;
@@ -106,16 +108,11 @@ export class Player {
     if (this.collision(boundaries)) {
       this.velocity.y = 0;
       this.velocity.x = 0;
-
       this.snapToGrid();
     } else {
       this.position.x += this.velocity.x * dt * SPEED;
       this.position.y += this.velocity.y * dt * SPEED;
     }
-    if (this.radian < 0 || this.radian > 0.75) {
-      this.openRate = -this.openRate;
-    }
-    this.radian += this.openRate * 0.5;
 
     this.checkOutOfXaxis();
     this.checkOutOfYaxis();
@@ -140,8 +137,15 @@ export class Player {
   }
   // when we add dt, we check collision at 5 px per frame, but in reality we are moving at different range due to dt variation
 
-  update(dt: number, boundaries:Boundary[]) {
+  update(dt: number, boundaries: Boundary[]) {
+    if (this.radian < 0 || this.radian > 0.75) {
+      this.openRate = -this.openRate;
+    }
+    this.radian += this.openRate * 0.5;
+
     this.draw();
+    const isanykeyPressed: boolean =
+      keys.w.pressed || keys.a.pressed || keys.s.pressed || keys.d.pressed;
     if (this.state === "active") {
       this.movePlayer(dt, boundaries);
     } else if (this.state === "intermediate") {
@@ -149,7 +153,7 @@ export class Player {
     }
   }
 
-  move(direction:string) {
+  move(direction: string) {
     switch (direction) {
       case "up":
         this.desiredDirection = {

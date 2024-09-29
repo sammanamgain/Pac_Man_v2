@@ -2,7 +2,7 @@ import { Boundary } from "./../class/Boundary";
 import { PowerUp } from "../class/PowerUp.ts";
 import { Player } from "../class/Player.ts";
 import { Pellet } from "../class/Pellet.ts";
-import {Ghost} from "../class/Ghost.ts";
+import { Ghost } from "../class/Ghost.ts";
 
 interface Position {
   x: number;
@@ -30,8 +30,9 @@ interface checkColissionWithBoundaryParameter {
 export function checkColissionWithBoundary({
   circle,
   rectangle,
-}: checkColissionWithBoundaryParameter) {
+}: checkColissionWithBoundaryParameter): boolean {
   const padding = Boundary.width / 2 - circle.radius - 2;
+
   return (
     circle.position.y - circle.radius + circle.velocity.y <=
       rectangle.position.y + rectangle.height + padding &&
@@ -45,7 +46,7 @@ export function checkColissionWithBoundary({
 }
 export function checkColissionBetweenCircleAndCircle(
   player: Player,
-  powerup: (PowerUp | Pellet | Ghost)
+  powerup: PowerUp | Pellet | Ghost
 ): boolean {
   return (
     Math.hypot(

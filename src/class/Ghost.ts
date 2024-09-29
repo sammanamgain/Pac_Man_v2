@@ -1,5 +1,5 @@
 import { ghostPositions, ghostAudio } from "./../constant";
-import { ctx ,canvas} from "../constant";
+import { ctx, canvas } from "../constant";
 import { getBestMove } from "../Algorithms/pathFinder.ts";
 const SPEED = 140;
 const CELL_SIZE = 20;
@@ -31,7 +31,7 @@ export class Ghost {
   public scared: boolean;
   public radius: number;
   public label: string | null | undefined;
-  public previousValidMoves:{x:number, y:number}  [];
+  public previousValidMoves: { x: number; y: number }[];
   public image: HTMLImageElement;
   public state: string;
   public startAfter: number;
@@ -39,8 +39,10 @@ export class Ghost {
   public imageLoaded: boolean;
   public timePassed: number;
   public currentFrame: number;
-  public defaultSrc:string;
-  public scaredsrc:string;
+  public defaultSrc: string;
+  public scaredsrc: string;
+  public isEntering: boolean;
+  public animationPosition: Position;
 
   constructor({
     position,
@@ -59,7 +61,7 @@ export class Ghost {
     this.speed = 2;
     this.scared = false;
     this.label = label;
-    this.previousValidMoves= [];
+    this.previousValidMoves = [];
     this.image = new Image();
     this.defaultSrc = imgSrc;
     this.image.src = imgSrc;
@@ -70,6 +72,8 @@ export class Ghost {
     this.state = state;
     this.startAfter = startAfter;
     this.startTime = Date.now();
+    this.isEntering = false;
+    this.animationPosition = { x: this.position.x, y: this.position.y };
 
     this.image.onload = () => {
       this.imageLoaded = true;
@@ -111,11 +115,11 @@ export class Ghost {
       this.position.y = this.radius;
     }
   }
-  update(dt:number, boundaries:Boundary[], level:number, map:(string)[][]) {
-    this.draw();
+  update(dt: number, boundaries: Boundary[], level: number, map: string[][]) {
+    // this.draw();
     this.updateSprite(dt);
 
-    if (this.state === "entering") {
+    if (this.state === "entering" && !this.isEntering) {
       this.enterGame(level);
       return;
     }
@@ -161,10 +165,13 @@ export class Ghost {
     this.checkOutOfXaxis();
   }
 
-  aggressiveUpdate(map:(string)[][], boundaries:Boundary[], dt:number, level:number) {
+  aggressiveUpdate(
+    map: string[][],
+    boundaries: Boundary[],
+    dt: number,
+    level: number
+  ) {
     const bestMove = getBestMove(map);
-
-
     for (const move of bestMove) {
       switch (move) {
         case "up":
@@ -190,11 +197,12 @@ export class Ghost {
         this.position.y += this.velocity.y * dt * (SPEED + 50 * level);
 
         break;
+      } else {
       }
     }
   }
 
-  updateSprite(dt:number) {
+  updateSprite(dt: number) {
     this.timePassed += dt;
     if (this.timePassed > 0.3) {
       this.currentFrame = (this.currentFrame + 1) % 8;
@@ -202,7 +210,7 @@ export class Ghost {
     }
   }
 
-  collision(boundaries:Boundary[]) {
+  collision(boundaries: Boundary[]) {
     for (const boundary of boundaries) {
       if (
         checkColissionWithBoundary({
@@ -223,7 +231,7 @@ export class Ghost {
     };
   }
 
-  gatherValidMoves(boundaries:Boundary[]) {
+  gatherValidMoves(boundaries: Boundary[]) {
     const directions = [
       { x: 1, y: 0 },
       { x: -1, y: 0 },
@@ -267,32 +275,44 @@ export class Ghost {
     }
     return validMoves;
   }
-
-  enterGame(level:number) {
-
-
+  enterGame(level: number) {
     const targetX = ghostPositions[level][1].x;
     const targetY = ghostPositions[level][1].y - Boundary.height;
-    const duration = 2000; // 2 seconds
-    const startTime = Date.now();
-    const startX = this.position.x;
-    const startY = this.position.y;
-    const updatePosition = () => {
-      const elapsed = Date.now() - startTime;
-      if (elapsed >= duration) {
-        this.position.x = targetX;
-        this.position.y = targetY;
+    const intermediateX = ghostPositions[level][1].x;
+    const intermediateY = ghostPositions[level][1].y;
+    this.isEntering = true;
+    const t = (window as any).gsap.timeline({
+      onComplete: () => {
         this.state = "active";
-        return;
-      }
+        this.isEntering = false;
+      },
+    });
 
-      const progress = elapsed / duration;
-      this.position.x = startX + (targetX - startX) * progress;
-      this.position.y = startY + (targetY - startY) * progress;
+    t.to(this.animationPosition, {
+      x: intermediateX,
+      y: intermediateY,
+      duration: 1.5,
+      ease: "power1.inOut",
+      onUpdate: () => {
+        this.position.x = this.animationPosition.x;
+        this.position.y = this.animationPosition.y;
+        this.draw();
+      },
+    });
 
-      requestAnimationFrame(updatePosition);
-    };
+    // Second animation: B to A
+    t.to(this.animationPosition, {
+      x: targetX,
+      y: targetY,
+      duration: 1.5,
+      ease: "power1.inOut",
+      onUpdate: () => {
+        this.position.x = this.animationPosition.x;
+        this.position.y = this.animationPosition.y;
+        this.draw();
+      },
+    });
 
-    requestAnimationFrame(updatePosition);
+    // console.log(this.state);
   }
 }

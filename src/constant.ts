@@ -21,7 +21,7 @@ export const keys = {
   lastkey: "",
 };
 
-export const maps:string[][][] = [
+export const maps: string[][][] = [
   [
     ["1", "-", "-", "-", "-", "]", ".", "[", "-", "-", "-", "-", "2"],
     ["|", ".", ".", ".", ".", ".", ".", ".", ".", ".", "I", ".", "|"],
@@ -54,7 +54,7 @@ export const maps:string[][][] = [
   ],
 ];
 
-export const customgrid:string[][] = [
+export const customgrid: string[][] = [
   [
     "1",
     "-",
@@ -385,7 +385,11 @@ export const customgrid:string[][] = [
   ],
 ];
 
-export const game:{state:string,customGridEnabled:boolean,level:number} = {
+export const game: {
+  state: string;
+  customGridEnabled: boolean;
+  level: number;
+} = {
   state: "start",
   customGridEnabled: false,
   level: 0,
@@ -407,7 +411,7 @@ export const ghostPositions = [
     },
     {
       x: Boundary.width * 6 + Boundary.width / 2,
-      y: Boundary.height *8 + Boundary.height / 2,
+      y: Boundary.height * 8 + Boundary.height / 2,
     },
     {
       x: Boundary.width * 5 + Boundary.width / 2,
@@ -438,8 +442,8 @@ export const ghostPositions = [
   ],
 ];
 
-export let ghostAudio:HTMLAudioElement = new Audio("./audio/siren.mp3");
-export let cherryAudio:HTMLAudioElement = new Audio("./audio/cherry.wav");
-export let powerupAudio:HTMLAudioElement = new Audio("./audio/powerup.wav");
+export let ghostAudio: HTMLAudioElement = new Audio("./audio/siren.mp3");
+export let cherryAudio: HTMLAudioElement = new Audio("./audio/cherry.wav");
+export let powerupAudio: HTMLAudioElement = new Audio("./audio/powerup.wav");
 //export let scaredGhostAudio:HTMLAudioElement = new Audio("./audio/ghostscared.wav");
-export let successAudio:HTMLAudioElement = new Audio("./audio/success.wav");
+export let successAudio: HTMLAudioElement = new Audio("./audio/success.wav");

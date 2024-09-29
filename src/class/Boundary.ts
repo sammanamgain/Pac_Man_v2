@@ -28,7 +28,6 @@ export class Boundary {
     this.label = label;
   }
 
-
   draw() {
     ctx.fillStyle = "blue";
     ctx.drawImage(
